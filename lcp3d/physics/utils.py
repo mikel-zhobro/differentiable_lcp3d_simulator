@@ -59,6 +59,7 @@ class PyBulletConnection:
             raise ValueError("Invalid connection type")
 
     def disconnect(self, client_id=None):
+        import pybullet as pb
         if client_id is None:
             for c in self.list_connections:
                 pb.disconnect(c)
