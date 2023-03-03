@@ -89,15 +89,15 @@ class LCPExperiment:
         else:
             pb.setTimeStep(self.dt, physicsClientId=self.clientID)
             pb.createConstraint(
-                self.bodies[0].get_geom_bullet(),
-                -1,
-                -1,
-                -1,
-                pb.JOINT_FIXED,
-                [0, 0, 0],
-                [0, 0, 0],
-                self.bodies[0].position.cpu().detach().numpy(),
-                # [0, 0, -0.025],
+                parentBodyUniqueId = self.bodies[0].get_geom_bullet(),
+                parentLinkIndex = -1,
+                childBodyUniqueId = -1,
+                childLinkIndex = -1,
+                jointType = pb.JOINT_FIXED,
+                jointAxis = [0, 0, 0],
+                parentFramePosition = [0, 0, 0],
+                childFramePosition = self.bodies[0]._numpy_position,
+                childFrameOrientation=self.bodies[0]._numpy_orientation_xyzw,
                 physicsClientId=self.clientID,
             )  # type: ignore
             pb.setGravity(0, 0, -10, physicsClientId=self.clientID)

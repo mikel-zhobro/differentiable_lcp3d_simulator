@@ -84,7 +84,7 @@ def rotation(orient, base_tensor):
     if orient.shape == (3, 3):
         rot = orient
     elif orient.shape[-1] == 3:
-        rot = pyt.quaternion_to_matrix(quat(orient))
+        rot = pyt.quaternion_to_matrix(quat_from_angle(orient))
     elif orient.shape[-1] == 4:
         rot = pyt.quaternion_to_matrix(orient)
     else:
@@ -99,7 +99,7 @@ def pose(pos, base_tensor):
     if pos.shape[-1] == 3:
         p = torch.cat((pos, pos.new_tensor([1.0, 0.0, 0.0, 0.0])))
     elif pos.shape[-1] == 6:
-        p = torch.cat((pos[:3], quat(pos[3:])))
+        p = torch.cat((pos[:3], quat_from_angle(pos[3:])))
         assert p.shape[0] == 7, p
     elif pos.shape[-1] == 7:
         p = pos
@@ -167,7 +167,10 @@ def get_quat_wxyz(q: torch.Tensor):
     return torch.cat((q[..., -1:], q[..., :-1]), dim=-1)
 
 
-def quat(ang, style="wxyz"):
+def rot_from_angle(ang, convention="XYZ"):
+    return pyt.euler_angles_to_matrix(ang, convention)
+
+def quat_from_angle(ang, convention="XYZ", style="wxyz"):
     """Returns a quaternion, and takes euler angles as inputs"""
     if isinstance(ang, list):
         assert len(ang) == 3
@@ -181,7 +184,7 @@ def quat(ang, style="wxyz"):
             )
         )
 
-    rot_mat = pyt.euler_angles_to_matrix(ang, "XYZ")
+    rot_mat = pyt.euler_angles_to_matrix(ang, convention)
     quaternion = pyt.matrix_to_quaternion(
         rot_mat
     )  # returns quaternion with real-part first
