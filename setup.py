@@ -9,5 +9,5 @@ setup(
     description="LCP3D",
     author="Mikel",
     packages=find_packages(),
-    install_requires=["numpy", "cvxpy", "scipy", "matplotlib", "torch", "pybullet", "pytorch3d"],
+    install_requires=["numpy", "cython", "cvxpy", "scipy", "matplotlib", "torch", "pybullet", "pytorch3d"],
 )
