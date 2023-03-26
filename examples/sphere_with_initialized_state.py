@@ -16,9 +16,6 @@ from lcp3d.physics.utils import get_tensor, PyBulletConnection
 
 from utils import get_experiment_dir, create_gif
 
-from examples.wrappers.lcp_3d_wrapper import (
-    LCP_3D_DynamicModel as WorldWrapper,
-)
 
 Defaults = get_config()
 
