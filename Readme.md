@@ -2,7 +2,20 @@
 
 Differentiable 3D physics engine with ODE contact detection, PyBullet dynamics visualization, and Tensorboard performance visualizatio
 
+# Create conda environment
 
+```bash
+conda create -n my_env python=3.9
+conda activate my_env
+```
+
+## Installing pytorch3d at /is
+from within the virtual env we call
+```
+conda install pytorch==1.11.0 torchvision==0.12.0 torchaudio==0.11.0 cudatoolkit=11.3 -c pytorch
+conda install -c fvcore -c iopath -c conda-forge fvcore iopath
+pip install --no-index --no-cache-dir pytorch3d -f https://dl.fbaipublicfiles.com/pytorch3d/packaging/wheels/py39_cu113_pyt1110/download.html
+```
 
 ## Installation recipe for Open Dynamics Engine (ODE)
 
