@@ -13,16 +13,33 @@ def get_skew(r: torch.Tensor): # same as hat
     my_skew[:, 2, 1] =  r[:, 0]
     return my_skew
 
+
 class F:
     TForce = 0
     TTorque = 1
     TWrench = 2
     NumType = [3, 3, 6]
-    def __init__(self, f_type: int, pos: list[float]=[0.,0.,0.]) -> None:
+    def __init__(self, f_type: int, pos: list[float]=[0.,0.,0.], ctrl_min=-1e6, ctrl_max=1e6) -> None:
         assert len(pos) == 3, "pos should be a [x,y,z] position list."
         self.f_type = f_type
         self.pos = pos
         self.num = F.NumType[f_type]
+        self.ctrl_min = self._get_limit(ctrl_min)
+        self.ctrl_max = self._get_limit(ctrl_max)
+
+
+    def _get_limit(self, limit):
+        # if it is a number, then we return a vector of that number
+        if isinstance(limit, float):
+            _limit = limit * np.ones(self.num)
+        elif isinstance(limit, (list, np.ndarray)):
+            if len(limit) == 2 and self.f_type == F.TWrench:
+                limit = [limit[0], limit[0], limit[0], limit[1], limit[1], limit[1]]
+            assert len(limit) == self.num, f"limit should have {self.num} elements or 2 if is a wrench."
+            _limit = limit
+        else:
+            raise ValueError(f"limit should be a float or a list of length {self.num}")
+        return _limit
 
     @staticmethod
     def from_force(x: torch.Tensor):
@@ -51,6 +68,7 @@ class F:
 
 class MultiWrench:
     def __init__(self, ix: int, f_t_w: list[F]) -> None:
+        # The forces/torques are ordered as follows in input vector: [F1, F2,.., FN, T1, T2,..,TK]
         self.ix = ix # index of the body in world.bodies
         self.types = [f.f_type for f in f_t_w]
         self.f_t_w = f_t_w
@@ -66,6 +84,8 @@ class MultiWrench:
         self.n_force = len(self.forces)
         self.n_torque = len(self.torques)
         self.num = 3*self.n_force + 3*self.n_torque
+        self.ctrl_min = np.concatenate([f.ctrl_min[:3] for f in self.forces] + [t.ctrl_min if t.f_type ==F.TTorque else t.ctrl_min[3:]  for t in self.torques])
+        self.ctrl_max = np.concatenate([f.ctrl_max[:3] for f in self.forces] + [t.ctrl_max if t.f_type ==F.TTorque else t.ctrl_max[3:]  for t in self.torques])
 
     @property
     def f_poses(self):
@@ -83,10 +103,6 @@ class MultiWrench:
 
     def get_torques(self, force_vec: torch.Tensor):
         return force_vec[self.n_force*3:]
-
-    def compute_from_cm_wrench(self, R: torch.Tensor, cm_wrench: torch.Tensor):
-        # 1. Build up the forward matrix
-        M = self.get_forward_matrix(R)
 
     def get_forward_matrix(self, R: torch.Tensor):
         # F_cm = M [F1, F2,.., FN, T1, T2,..,TK]^T

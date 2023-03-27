@@ -36,6 +36,13 @@ class PyBulletConnection:
             return clientIndex
         elif connection == "direct":
             clientIndex = pb.connect(pb.DIRECT)
+            pb.resetDebugVisualizerCamera(
+                cameraDistance=7.5,
+                cameraYaw=45,
+                cameraPitch=-30,
+                cameraTargetPosition=[0, 0, 0],
+                physicsClientId=clientIndex,
+            )
             self.list_connections.append(clientIndex)
             print("Bullet client created: DIRECT, ID: {}".format(clientIndex))
             return clientIndex
@@ -271,9 +278,11 @@ def get_vertices_faces(obj_msh_lines: list):
     vertices = []
     faces = []
     for line in obj_msh_lines:
-        entries = line.rstrip().split(" ")
+        entries = line.rstrip().split()
         # Check vertices
-        if entries[0] == "v":
+        if len(entries) == 0:
+            continue
+        elif entries[0] == "v":
             # Check x-coordinates
             assert len(entries[1:]) == 3
             vertices.append([float(e) for e in entries[1:]])

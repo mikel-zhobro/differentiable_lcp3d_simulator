@@ -177,7 +177,7 @@ class RigidBody(ABC):
     @property
     def _numpy_orientation(self):
         # return matrix_to_quaternion(torch.tensor(self._numpy_rot)).numpy()
-        return matrix_to_quaternion(torch.tensor(self.world.R[self.ix])).detach().cpu().numpy()
+        return matrix_to_quaternion(self.world.R[self.ix].clone().detach())
 
     @property
     def _numpy_orientation_xyzw(self):

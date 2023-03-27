@@ -43,6 +43,7 @@ class World:
         self,
         bodies: list[RigidBody],
         constraints: Union[list[Constraint], None] = None,
+        gravity = default_config.g,
         dt=default_config.dt,
         writer=None,
         log=False,
@@ -60,7 +61,7 @@ class World:
         self.R0 = torch.stack([b.init_R for b in self.bodies])                  # (N, 3, 3)
         self.v_w0 = torch.stack([b.init_vw for b in self.bodies])              # (N, 6)
         self.gravity = self.p0.new_zeros((len(self.bodies), 6))             # (N, 6)
-        self.gravity[:, 2] = default_config.g*torch.stack([b.mass for b in self.bodies])
+        self.gravity[:, 2] = gravity*torch.stack([b.mass for b in self.bodies])
         self.forces = self.p0.new_zeros((len(self.bodies), 6))              # (N, 6)
         # -> current state
         self.p, self.R, self.vw = self.p0.clone(), self.R0.clone(), self.v_w0.clone()
