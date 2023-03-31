@@ -272,6 +272,7 @@ class RigidBody(ABC):
             restitution=self.restitution,
             linearDamping=0.0,
             angularDamping=0.0,
+            jointDamping =0.0,
             physicsClientId=self.client_id,
         )  # type: ignore
         quat_xyzw = get_quat_xyzw_numpy(matrix_to_quaternion(self.init_R).numpy())
