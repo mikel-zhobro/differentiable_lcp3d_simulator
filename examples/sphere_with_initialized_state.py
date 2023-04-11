@@ -14,7 +14,7 @@ from lcp3d.physics.forces import MultiWrench, F
 from lcp3d.physics.bodies import RigidBody, Box, Sphere
 from lcp3d.physics.utils import get_tensor, PyBulletConnection
 
-from utils import get_experiment_dir, create_gif
+from .utils import get_experiment_dir, create_gif
 
 
 Defaults = get_config()
