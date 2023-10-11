@@ -1,15 +1,49 @@
 # LCP Physics 3D
+Differentiable 3D physics engine with ODE contact detection and PyBullet dynamics visualization based on [de avila Belbute-Peres et. al.](https://proceedings.neurips.cc/paper_files/paper/2018/hash/842424a1d0595b76ec4fa03c46e8d755-Abstract.html).
 
-Differentiable 3D physics engine with ODE contact detection, PyBullet dynamics visualization, and Tensorboard performance visualizatio
+The repo should be self contained and can be used as a package.
 
-# Create conda environment
+
+## Organization
+``` bash
+Readme.md                               # this file
+setup.py                                # setup file for the package
+
+
+examples                                # examples
+├── compare.py                          # functionalities to compare different runs for the sphere example
+├── sphere_with_initialized_state.py    # sphere example with initialized state where we compare LCP and PyBullet
+└── utils.py                            # utility functions for the examples
+
+lcp3d                                   # main package
+├── lcp                                 # lcp package
+│   ├── solvers.py
+│   ├── lcp.py
+│   │   ├── batch.py
+│   │   ├── cvxpy.py
+│   │   ├── pdipm.py
+│   │   └── spbatch.py
+│   └── util.py
+│
+├── physics
+│   ├── bodies.py                       # body class
+│   ├── constraints.py                  # constraint class
+│   ├── contacts.py                     # contact class
+│   ├── engines.py                      # engine class
+│   ├── forces.py                       # force class
+│   ├── utils.py                        # utility functions
+└── └── world.py                        # holds implementation of world and also most of the changes
+```
+
+## Installation
+### a. Create conda environment
 
 ```bash
 conda create -n my_env python=3.9
 conda activate my_env
 ```
 
-## Installing pytorch3d at /is
+### b. Installing pytorch3d at
 from within the virtual env we call
 ```
 conda install pytorch==1.11.0 torchvision==0.12.0 torchaudio==0.11.0 cudatoolkit=11.3 -c pytorch
@@ -17,7 +51,7 @@ conda install -c fvcore -c iopath -c conda-forge fvcore iopath
 pip install --no-index --no-cache-dir pytorch3d -f https://dl.fbaipublicfiles.com/pytorch3d/packaging/wheels/py39_cu113_pyt1110/download.html
 ```
 
-## Installation recipe for Open Dynamics Engine (ODE)
+### c. Installation recipe for Open Dynamics Engine (ODE)
 
 1. Download stable release from [https://bitbucket.org/odedevs/ode/downloads/](https://bitbucket.org/odedevs/ode/downloads/)
 2. Unzip and install

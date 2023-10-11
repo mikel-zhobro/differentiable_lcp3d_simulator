@@ -12,7 +12,7 @@ def create_gif(rgb_images, dir):
 
 def get_experiment_dir(base_dir=None, ending=""):
     "Backups the data for reproduction, creates plots and saves plots."
-    tmp = "/is/sg2/mzhobro/Desktop/Experiments/" if base_dir is None else base_dir
+    tmp = "~/Desktop/Experiments/" if base_dir is None else base_dir
     directory = "{}{}/".format(tmp, time.strftime("%Y_%m_%d"))
     if not os.path.exists(directory):
         os.makedirs(directory)

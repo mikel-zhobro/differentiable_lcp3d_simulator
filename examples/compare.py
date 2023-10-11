@@ -159,7 +159,5 @@ def plot_energy(dir, vels2, vels3, Ias2, Ias3):
 
 
 # if __name__ == "__main__":
-#     dir = "/is/sg2/mzhobro/Desktop/Experiments/2022_06_20/17_04_27/"
-#     # dir = "/is/sg2/mzhobro/Desktop/Experiments/2022_06_20/17_05_50/"
-#     dir = "/is/sg2/mzhobro/Desktop/Experiments/2022_06_20/17_51_06/"
+#     dir = "Experiments/2022_06_20/17_04_27/"
 #     plot(dir)

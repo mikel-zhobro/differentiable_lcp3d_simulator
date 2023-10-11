@@ -41,37 +41,6 @@ class Config:
         self.lcp_device = torch.device("cpu")
         self.layout = torch.strided
 
-        # compute = "local"
-        compute = "cluster"
-
-        if compute == "local":
-            # Datasets local
-            self.ycb_video_dataset_dir = "/is/rg/ev/scratch/datasets/YCB_Video_Dataset/"
-            self.vhacd_meshes_dir = (
-                "/is/sg2/rkandukuri/my_code/ekf_physics/ekf_physics/vhacd_meshes/"
-            )
-            self.syn_phys_dataset_dir = "/is/rg/ev/scratch/datasets/synphys/"
-
-            # FFB6D checkpoint local
-            self.checkpoint = "/is/rg/ev/scratch/shared/CVPR2022_physicstrack/ffb6d/train_log/synphys/checkpoints/FFB6D_best.pth.tar"
-            # self.checkpoint = "/is/rg/ev/scratch/shared/CVPR2022_physicstrack/ffb6d/train_log/synphys_inv_11746700/checkpoints/FFB6D_best.pth.tar"
-
-        elif compute == "cluster":
-            # Datasets cluster
-            self.ycb_video_dataset_dir = (
-                "/is/cluster/work/projects/is-rg-ev/datasets/YCB_Video_Dataset/"
-            )
-            self.vhacd_meshes_dir = "/is/cluster/work/rkandukuri/datasets/vhacd_meshes/"
-            self.syn_phys_dataset_dir = (
-                "/is/cluster/work/projects/is-rg-ev/datasets/synphys/"
-            )
-
-            # FFB6D checkpoint cluster
-            self.checkpoint = "/is/cluster/work/rkandukuri/inference/ffb6d/synphys/november_model/FFB6D_best.pth.tar"
-
-        else:
-            raise NotImplementedError(f"Compute not implemented for {compute}")
-
     def add_params(self, **kwargs):
         for key, val in kwargs:
             if hasattr(self, key):
